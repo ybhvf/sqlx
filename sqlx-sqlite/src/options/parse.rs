@@ -99,6 +99,12 @@ impl SqliteConnectOptions {
 
                     "vfs" => options.vfs = Some(Cow::Owned(value.into_owned())),
 
+                    "extensions" => {
+                        for ext in (&*value).split(",")  {
+                            options = options.extension(ext.to_string());
+                        }
+                    },
+
                     _ => {
                         return Err(Error::Configuration(
                             format!("unknown query parameter `{key}` while parsing connection URL")
